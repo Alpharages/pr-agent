@@ -1,0 +1,62 @@
+services:
+  # GitHub App Server - Most common deployment for GitHub integration
+  github-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: github_app
+    ports:
+      - "127.0.0.1:3005:3000"
+    volumes:
+      - ./pr_agent/settings/.secrets.toml:/app/pr_agent/settings/.secrets.toml:ro
+      - ./pr_agent/settings/configuration.toml:/app/pr_agent/settings/configuration.toml:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # CLI Service - For running PR-Agent commands
+  cli:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: cli
+    environment:
+      - OPENAI__KEY=${OPENAI_API_KEY}
+      - GITHUB__USER_TOKEN=${GITHUB_USER_TOKEN}
+      - GITHUB__DEPLOYMENT_TYPE=user
+      - CONFIG__GIT_PROVIDER=github
+      - CONFIG__LOG_LEVEL=INFO
+    volumes:
+      - ./pr_agent/settings/.secrets.toml:/app/pr_agent/settings/.secrets.toml:ro
+      - ./pr_agent/settings/configuration.toml:/app/pr_agent/settings/configuration.toml:ro
+      - .:/workspace
+    working_dir: /workspace
+    profiles:
+      - cli
+    stdin_open: true
+    tty: true
+
+  # GitHub Polling Server - Alternative to webhooks
+  github-polling:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: github_polling
+    volumes:
+      - ./pr_agent/settings/.secrets.toml:/app/pr_agent/settings/.secrets.toml:ro
+      - ./pr_agent/settings/configuration.toml:/app/pr_agent/settings/configuration.toml:ro
+    restart: unless-stopped
+    profiles:
+      - polling
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  pr_agent_data:
+    driver: local
