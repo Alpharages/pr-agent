@@ -42,8 +42,6 @@ For example, you can choose to present all the suggestions as committable code c
 
 ![improve](https://codium.ai/images/pr_agent/improve.png){width=512}
 
-As can be seen, a single table comment has a significantly smaller PR footprint. We recommend this mode for most cases.
-Also note that collapsible are not supported in _Bitbucket_. Hence, the suggestions can only be presented in Bitbucket as code comments.
 
 #### Manual more suggestions
 To generate more suggestions (distinct from the ones already generated), for git-providers that don't support interactive checkbox option, you can manually run:
@@ -70,6 +68,32 @@ num_code_suggestions_per_chunk = ...
 
 - The `pr_commands` lists commands that will be executed automatically when a PR is opened.
 - The `[pr_code_suggestions]` section contains the configurations for the `improve` tool you want to edit (if any)
+
+### Table vs Committable code comments
+
+Qodo Merge supports two modes for presenting code suggestions: 
+
+1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode 
+
+2) [Inline Committable](https://codium.ai/images/pr_agent/improve.png) code comments mode.
+
+The table format offers several key advantages:
+
+- **Reduced noise**: Creates a cleaner PR experience with less clutter
+- **Quick overview and prioritization**: Enables quick review of one-liner summaries, impact levels, and easy prioritization
+- **High-level suggestions**: High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
+- **Interactive features**: Provides 'more' and 'update' functionality via clickable buttons
+- **Centralized tracking**: Shows suggestion implementation status in one place
+- **IDE integration**: Allows applying suggestions directly in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
+
+Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits. 
+
+![code_suggestions_as_comment_closed.png](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png){width=512}
+
+Teams with specific preferences can enable committable code comments mode in their local configuration, or use [dual publishing mode](#dual-publishing-mode).
+
+> `Note - due to platform limitations, Bitbucket cloud and server supports only committable code comments mode.`
+
 
 ### Assessing Impact
 
@@ -241,16 +265,18 @@ For organizations managing multiple repositories with different requirements, Qo
        │   ├── cpp_repos/
        │   │   └── best_practices.md
        │   └── ...
-       ├── qodo-merge/                  # For standalone repositories
+       ├── repo_a/                      # For standalone repositories
        │   └── best_practices.md
-       ├── qodo-monorepo/               # For monorepo-specific rules 
+       ├── monorepo-name/               # For monorepo-specific rules 
        │   ├── best_practices.md        # Root level monorepo rules
-       │   ├── qodo-github/             # Subproject best practices
+       │   ├── service-a/               # Subproject best practices
        │   │   └── best_practices.md
-       │   └── qodo-gitlab/             # Another subproject
+       │   └── service-b/               # Another subproject
        │       └── best_practices.md
        └── ...                          # More repositories
    ```
+
+> **Note:** In this structure, `pr-agent-settings`, `codebase_standards`, `global`, `groups`, `metadata.yaml`, and `best_practices.md` are hardcoded names that must be used exactly as shown. All other names (such as `frontend_repos`, `backend_repos`, `repo_a`, `monorepo-name`, `service-a`, etc.) are examples and should be replaced with your actual repository and service names.
 
 ???+ tip "Grouping and categorizing best practices"
     - Each folder (including the global folder) can contain a single `best_practices.md` file
@@ -260,9 +286,9 @@ For organizations managing multiple repositories with different requirements, Qo
 
    ```yaml
    # Standalone repos
-   qodo-merge:
+   repo_a:
      best_practices_paths:
-       - "qodo-merge"
+       - "repo_a"
 
    # Group-associated repos
    repo_b:
@@ -276,16 +302,16 @@ For organizations managing multiple repositories with different requirements, Qo
        - "groups/backend_repos"
 
    # Monorepo with subprojects
-   qodo-monorepo:
+   monorepo-name:
      best_practices_paths:
-       - "qodo-monorepo"
+       - "monorepo-name"
      monorepo_subprojects:
-       qodo-github:
+       service-a:
          best_practices_paths:
-           - "qodo-monorepo/qodo-github"
-       qodo-gitlab:
+           - "monorepo-name/service-a"
+       service-b:
          best_practices_paths:
-           - "qodo-monorepo/qodo-gitlab"
+           - "monorepo-name/service-b"
    ```
 
 4\. Set the following configuration in your global configuration file:
@@ -462,7 +488,6 @@ Available options:
 
 We recommend starting with `regular` mode, then exploring `exhaustive` mode, which can provide more comprehensive suggestions and enhanced bug detection.
 
-
 ### Self-review
 
 > `💎 feature. Platforms supported: GitHub, GitLab`
@@ -529,6 +554,36 @@ This approach has two main benefits:
 - Quality: By processing smaller chunks, the AI can maintain higher quality suggestions, as larger contexts tend to decrease AI performance.
 
 Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 lines of code), Qodo Merge will be able to process the entire code in a single call.
+
+#### Maximum coverage configuration
+> `💎 feature`
+
+For critical code reviews requiring maximum coverage, you can combine several settings to achieve a "super exhaustive" analysis. This is not a built-in mode, but a configuration recipe for advanced use cases.
+
+```toml
+# Recipe for maximum suggestion comprehensiveness
+[pr_code_suggestions]
+suggestions_depth = "exhaustive"
+enable_suggestion_type_reuse = true
+num_code_suggestions_per_chunk = 100
+num_best_practice_suggestions = 100
+```
+
+This configuration is recommended for:
+
+- Critical code reviews requiring maximum coverage
+- Final reviews before major releases
+- Code quality audits
+
+???- warning "Performance considerations"
+
+    This configuration will significantly increase:
+
+    - Analysis time and API costs
+    - Number of suggestions generated (potentially overwhelming)
+    - Comment volume in your PR
+    
+    Use this configuration judiciously and consider your team's review capacity.
 
 ## Configuration options
 

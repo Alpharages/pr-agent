@@ -149,6 +149,9 @@ Each compliance is defined in a YAML file as follows:
     - Use clear, actionable language that developers can understand
     - Focus on meaningful compliance requirements, not style preferences
 
+???+ tip "Ready-to-use compliance templates"
+    For production-ready compliance checklist templates organized by programming languages and technology stacks, check out the [PR Compliance Templates repository](https://github.com/qodo-ai/pr-compliance-templates).
+
 ### Local Compliance Checklists
 
 For basic usage, create a `pr_compliance_checklist.yaml` file in your repository's root directory containing the compliance requirements specific to your repository.
@@ -168,7 +171,7 @@ Qodo Merge supports hierarchical compliance checklists using a dedicated global 
 ```bash
 pr-agent-settings/
 ├── metadata.yaml                              # Maps repos/folders to compliance paths
-└── compliance_standards/                      # Root for all compliance definitions
+└── codebase_standards/                        # Root for all compliance definitions
     ├── global/                                # Global compliance, inherited widely
     │   └── pr_compliance_checklist.yaml
     ├── groups/                                # For groups of repositories
@@ -181,16 +184,18 @@ pr-agent-settings/
     │   ├── cpp_repos/
     │   │   └── pr_compliance_checklist.yaml
     │   └── ...
-    ├── qodo-merge/                            # For standalone repositories
+    ├── repo_a/                                # For standalone repositories
     │   └── pr_compliance_checklist.yaml
-    ├──  qodo-monorepo/                        # For monorepo-specific compliance
+    ├── monorepo-name/                         # For monorepo-specific compliance
     │   ├── pr_compliance_checklist.yaml       # Root-level monorepo compliance
-    │   ├── qodo-github/                       # Subproject compliance
+    │   ├── service-a/                         # Subproject compliance
     │   │   └── pr_compliance_checklist.yaml
-    │   └── qodo-gitlab/                       # Another subproject
+    │   └── service-b/                         # Another subproject
     │       └── pr_compliance_checklist.yaml
     └── ...                                    # More repositories
 ```
+
+> **Note:** In this structure, `pr-agent-settings`, `codebase_standards`, `global`, `groups`, `metadata.yaml`, and `pr_compliance_checklist.yaml` are hardcoded names that must be used exactly as shown. All other names (such as `frontend_repos`, `backend_repos`, `repo_a`, `monorepo-name`, `service-a`, etc.) are examples and should be replaced with your actual repository and service names.
 
 ???+ tip "Grouping and categorizing compliance checklists"
     - Each folder (including the global folder) can contain a single `pr_compliance_checklist.yaml` file
@@ -200,9 +205,9 @@ pr-agent-settings/
 
 ```yaml
 # Standalone repos
-qodo-merge:
+repo_a:
   pr_compliance_checklist_paths:
-    - "qodo-merge"
+    - "repo_a"
 
 # Group-associated repos
 repo_b:
@@ -216,16 +221,16 @@ repo_c:
     - "groups/backend_repos"
 
 # Monorepo with subprojects
-qodo-monorepo:
+monorepo-name:
   pr_compliance_checklist_paths:
-    - "qodo-monorepo"
+    - "monorepo-name"
   monorepo_subprojects:
-    frontend:
+    service-a:
       pr_compliance_checklist_paths:
-        - "qodo-monorepo/qodo-github"
-    backend:
+        - "monorepo-name/service-a"
+    service-b:
       pr_compliance_checklist_paths:
-        - "qodo-monorepo/qodo-gitlab"
+        - "monorepo-name/service-b"
 ```
 
 4\. Set the following configuration:

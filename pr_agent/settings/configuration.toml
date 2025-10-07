@@ -49,6 +49,9 @@ duplicate_prompt_examples = false
 # seed
 seed=-1 # set positive value to fix the seed (and ensure temperature=0)
 temperature=0.2
+# bring repo metadata 💎
+add_repo_metadata=false # if true, will try to add metadata from files like 'AGENTS.MD', 'CLAUDE.MD', 'QODO.MD'
+add_repo_metadata_file_list =["AGENTS.MD", "CLAUDE.MD", "QODO.MD"]
 # ignore logic
 ignore_pr_title = ["^\\[Auto\\]", "^Auto"] # a list of regular expressions to match against the PR title to ignore the PR agent
 ignore_pr_target_branches = [] # a list of regular expressions of target branches to ignore from PR agent when an PR is created
@@ -273,6 +276,7 @@ push_commands = [
 
 [gitlab]
 url = "https://gitlab.com"
+expand_submodule_diffs = false
 pr_commands = [
     "/describe --pr_description.final_update_message=false",
     "/review",
@@ -341,7 +345,7 @@ service_callback = []
 skip_comments = false
 force_update_dataset = false
 max_issues_to_scan = 500
-vectordb = "pinecone"
+vectordb = "pinecone" # options: "pinecone", "lancedb", "qdrant"
 
 [pr_find_similar_component]
 class_name = ""
@@ -358,6 +362,11 @@ number_of_results = 5
 
 [lancedb]
 uri = "./lancedb"
+
+[qdrant]
+# fill and place credentials in .secrets.toml
+# url = "https://YOUR-QDRANT-URL"
+# api_key = "..."
 
 [best_practices]
 content = ""

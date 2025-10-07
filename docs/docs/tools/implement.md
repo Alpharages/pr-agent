@@ -43,7 +43,7 @@ It leverages LLM technology to transform PR comments and review suggestions into
     You can reference and implement changes from any comment by:
 
     ```
-    /implement <link-to-review-comment>
+    /implement <link-to-an-inline-comment>
     ```
 
     ![implement3](https://codium.ai/images/pr_agent/implement3.png){width=640}
@@ -54,4 +54,4 @@ It leverages LLM technology to transform PR comments and review suggestions into
 
 - Use `/implement` to implement code change within and based on the review discussion.
 - Use `/implement <code-change-description>` inside a review discussion to implement specific instructions.
-- Use `/implement <link-to-review-comment>` to indirectly call the tool from any comment.
+- Use `/implement <link-to-an-inline-comment>` to respond to an inline comment by triggering the tool from anywhere in the thread.
