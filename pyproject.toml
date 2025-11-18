@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pr-agent"
-version = "0.3.0"
+version = "0.3.1"
 
-authors = [{ name = "QodoAI", email = "tal.r@qodo.ai" }]
+authors = [{ name = "QodoAI", email = "ofir.f@qodo.ai" }]
 
 maintainers = [
-  { name = "Tal Ridnik", email = "tal.r@qodo.ai" },
+  { name = "Ofir Friedman", email = "ofir.f@qodo.ai" },
 ]
 
 description = "QodoAI PR-Agent aims to help efficiently review and handle pull requests, by providing AI feedbacks and suggestions."

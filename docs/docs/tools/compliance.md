@@ -292,6 +292,27 @@ enable_global_pr_compliance = true
       </tr>
     </table>
 
+???+ example "Section visibility options"
+
+    <table>
+      <tr>
+        <td><b>enable_security_section</b></td>
+        <td>If set to true, the security compliance section will be displayed in the output. When false, the entire security section is hidden. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>enable_ticket_section</b></td>
+        <td>If set to true, the ticket compliance section will be displayed in the output. When false, the entire ticket section is hidden. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>enable_codebase_duplication_section</b></td>
+        <td>If set to true, the codebase duplication compliance section will be displayed in the output. When false, the entire codebase duplication section is hidden. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>enable_custom_compliance_section</b></td>
+        <td>If set to true, the custom compliance section will be displayed in the output. When false, the entire custom section is hidden. Default is true.</td>
+      </tr>
+    </table>
+
 ???+ example "Security compliance options"
 
     <table>
@@ -319,6 +340,19 @@ enable_global_pr_compliance = true
       <tr>
         <td><b>check_pr_additional_content</b></td>
         <td>If set to true, the tool will check if the PR contains content not related to the ticket. Default is false.</td>
+      </tr>
+    </table>
+
+???+ example "Generic custom compliance checklist options"
+
+    <table>
+      <tr>
+        <td><b>enable_generic_custom_compliance_checklist</b></td>
+        <td>If set to true, the tool will apply generic custom compliance checklist rules. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>persist_generic_custom_compliance_checklist</b></td>
+        <td>If set to false, generic compliance checklist will not be kept with custom compliance. Default is false.</td>
       </tr>
     </table>
 
