@@ -16,3 +16,8 @@ push_commands = [
     "/describe",
     "/improve"
 ]
+
+# configurations for the improve tool
+[pr_code_suggestions]
+commitable_code_suggestions = true  # ← Enable for Dark Factory
+suggestions_score_threshold = 8     # Only show high-confidence suggestions
