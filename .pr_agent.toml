@@ -8,13 +8,11 @@ enable_global_best_practices = true
 [github_app]
 pr_commands = [
     "/describe --pr_description.final_update_message=false",
-    "/compliance",
     "/improve",
     "/agentic_review"  # experimental, avert production for now.
 ]
 
 push_commands = [
     "/describe",
-    "/compliance --update_compliance=true",
     "/improve"
 ]
